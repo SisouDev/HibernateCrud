@@ -2,6 +2,7 @@
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+META-INF/persistence.xml
 resources
 /resources
 ./resources
@@ -58,7 +59,7 @@ db.properties
 persistence.xml
 *.resources
 .resources/
-
+META-INF/persistence.xml
 /resources/META-INF/
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
