@@ -58,6 +58,15 @@ public class UserDao {
         entityManager.close();
     }
 
-
+    public void removeById(Long id) {
+        EntityManager entityManager = JpaUtil.getEntityManager();
+        User user = entityManager.find(User.class, id);
+        if (user != null){
+            entityManager.getTransaction().begin();
+            entityManager.remove(user);
+            entityManager.getTransaction().commit();
+        }
+       entityManager.close();
+    }
 
 }
