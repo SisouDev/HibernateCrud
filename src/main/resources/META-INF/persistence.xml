@@ -6,8 +6,8 @@
     <persistence-unit name="hibernate" transaction-type="RESOURCE_LOCAL">
         <class>org.hibernate.model.User</class>
         <class>org.hibernate.model.Product</class>
-        <class>org.hibernate.model.Address</class>
         <class>org.hibernate.model.Order</class>
+        <class>org.hibernate.model.Addresses</class>
         <!-- Configuração do banco de dados -->
         <properties>
             <!-- URL de conexão com o banco -->

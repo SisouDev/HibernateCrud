@@ -1,13 +1,15 @@
 package org.hibernate.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.utils.enums.ORDER_STATUS;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,25 +28,37 @@ public class Order {
     )
     private List<Product> products;
 
-    private LocalDateTime orderDate;
+    @CreationTimestamp
+    @Column(name = "order_date", columnDefinition = "DATE")
+    private LocalDate orderDate;
+
     private Integer totalQuantity;
     private Double totalPrice;
+    private Double shippingFee;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "address_id")
-    private Address address;
+    private Addresses address;
 
     public Order() {
     }
 
-    public Order(ORDER_STATUS status, User user, List<Product> products, LocalDateTime orderDate, Integer totalQuantity, Double totalPrice, Address address) {
+    public Order(ORDER_STATUS status, User user, List<Product> products, Addresses address, Double shippingFee) {
         this.status = status;
         this.user = user;
         this.products = products;
-        this.orderDate = orderDate;
-        this.totalQuantity = totalQuantity;
-        this.totalPrice = totalPrice;
         this.address = address;
+        this.shippingFee = shippingFee;
+        this.totalPrice = getTotalPrice();
+        this.totalQuantity = products.size();
+    }
+
+    public Double getShippingFee() {
+        return shippingFee;
+    }
+
+    public void setShippingFee(Double shippingFee) {
+        this.shippingFee = shippingFee;
     }
 
     public ORDER_STATUS getStatus() {
@@ -71,11 +85,11 @@ public class Order {
         this.products = products;
     }
 
-    public LocalDateTime getOrderDate() {
+    public LocalDate getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(LocalDateTime orderDate) {
+    public void setOrderDate(LocalDate orderDate) {
         this.orderDate = orderDate;
     }
 
@@ -88,18 +102,23 @@ public class Order {
     }
 
     public Double getTotalPrice() {
-        return totalPrice;
+        double totalPrice = 0.0;
+        for (Product product : products) {
+            double price = product.getPrice();
+            totalPrice += price;
+        }
+        return totalPrice + shippingFee;
     }
 
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public Address getAddress() {
+    public Addresses getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(Addresses address) {
         this.address = address;
     }
 

@@ -15,23 +15,32 @@ public class User {
     private String email;
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "address_id")
-    private Address address;
+    private Addresses address;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String password, Character gender) {
+    public User(String firstName, String lastName, String email, String password, Character gender, Addresses address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.gender = gender;
+        this.address = address;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public Addresses getAddress() {
+        return address;
+    }
+
+    public void setAddress(Addresses address) {
+        this.address = address;
     }
 
     public Character getGender() {

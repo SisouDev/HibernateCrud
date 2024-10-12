@@ -1,28 +1,40 @@
 package org.hibernate.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
 @Entity
-public class Address {
+@Table(name = "address")
+public class Addresses {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(length = 50, nullable = false)
     private String street;
+    @Column(length = 50, nullable = false)
     private String city;
+    @Column(length = 50, nullable = false)
     private String state;
+    @Column(length = 50, nullable = false)
+    private String country;
 
-    public Address() {
+    public Addresses() {
     }
 
-    public Address(String street, String city, String state) {
+    public Addresses(String street, String city, String state, String country) {
         this.street = street;
         this.city = city;
         this.state = state;
+        this.country = country;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getStreet() {
@@ -56,13 +68,13 @@ public class Address {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Address address)) return false;
-        return Objects.equals(getId(), address.getId()) && Objects.equals(getStreet(), address.getStreet()) && Objects.equals(getCity(), address.getCity()) && Objects.equals(getState(), address.getState());
+        if (!(o instanceof Addresses addresses)) return false;
+        return Objects.equals(getId(), addresses.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getStreet(), getCity(), getState());
+        return Objects.hashCode(getId());
     }
 
     @Override
@@ -72,6 +84,7 @@ public class Address {
                 ", street='" + street + '\'' +
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
+                ", country='" + country + '\'' +
                 '}';
     }
 }
