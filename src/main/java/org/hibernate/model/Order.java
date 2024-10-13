@@ -43,6 +43,7 @@ public class Order {
     public Order() {
     }
 
+
     public Order(ORDER_STATUS status, User user, List<Product> products, Addresses address, Double shippingFee) {
         this.status = status;
         this.user = user;

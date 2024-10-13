@@ -31,7 +31,7 @@ public class BasicDao <T>{
 
     public List<T> findAll() {
         EntityManager entityManager = JpaUtil.getEntityManager();
-        String jpql = "SELECT t FROM " + entityClass.getSimpleName() + " t";
+        String jpql = "SELECT DISTINCT t FROM " + entityClass.getSimpleName() + " t LEFT JOIN FETCH t.products";
         Query query = entityManager.createQuery(jpql);
         query.setMaxResults(5);
         List<T> list = query.getResultList();
