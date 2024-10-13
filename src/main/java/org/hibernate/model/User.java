@@ -17,12 +17,12 @@ public class User {
 
     @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "address_id")
-    private Addresses address;
+    private Address address;
 
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String password, Character gender, Addresses address) {
+    public User(String firstName, String lastName, String email, String password, Character gender, Address address) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -35,11 +35,11 @@ public class User {
         return id;
     }
 
-    public Addresses getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(Addresses address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 

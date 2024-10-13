@@ -1,59 +1,66 @@
 package org.hibernate.dao;
 
 import jakarta.persistence.EntityManager;
+import org.hibernate.HibernateException;
 import org.hibernate.model.User;
 import org.hibernate.utils.JpaUtil;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class UserDao {
-    public void updateFirstName(Long id, String firstName) {
-        EntityManager entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
+
+    public User getUserById(EntityManager entityManager, Long id) {
         User user = entityManager.find(User.class, id);
-        user.setFirstName(firstName);
-        entityManager.merge(user);
-        entityManager.getTransaction().commit();
+        if (user == null) {
+            entityManager.close();
+            throw new HibernateException("User not found");
+        }
+        return user;
+    }
+
+    public List<User> findAllUsers(){
+        EntityManager entityManager = JpaUtil.getEntityManager();
+        List<User> users = entityManager.createQuery("from User").getResultList();
         entityManager.close();
+        return users;
+    }
+
+    public void updateUser(Long id, Consumer<User> updateFunction) {
+        EntityManager entityManager = JpaUtil.getEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            User user = getUserById(entityManager, id);
+            updateFunction.accept(user);
+            entityManager.merge(user);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw e;
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    public void updateFirstName(Long id, String firstName) {
+        updateUser(id, s -> s.setFirstName(firstName));
     }
 
     public void updateLastName(Long id, String lastName) {
-        EntityManager entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        User user = entityManager.find(User.class, id);
-        user.setLastName(lastName);
-        entityManager.merge(user);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        updateUser(id, s -> s.setLastName(lastName));
     }
 
     public void updateEmail(Long id, String email) {
-        EntityManager entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        User user = entityManager.find(User.class, id);
-        user.setEmail(email);
-        entityManager.merge(user);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        updateUser(id, s -> s.setEmail(email));
     }
 
     public void updatePassword(Long id, String password) {
-        EntityManager entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        User user = entityManager.find(User.class, id);
-        user.setPassword(password);
-        entityManager.merge(user);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        updateUser(id, s -> s.setPassword(password));
     }
 
     public void updateGender(Long id, Character gender) {
-        EntityManager entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        User user = entityManager.find(User.class, id);
-        user.setGender(gender);
-        entityManager.merge(user);
-        entityManager.getTransaction().commit();
-        entityManager.close();
+        updateUser(id, s -> s.setGender(gender));
     }
 }

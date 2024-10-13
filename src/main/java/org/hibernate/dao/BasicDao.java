@@ -7,7 +7,7 @@ import org.hibernate.utils.JpaUtil;
 import java.util.List;
 
 public class BasicDao <T>{
-    private Class<T> entityClass;
+    private final Class<T> entityClass;
 
     public BasicDao(Class<T> entityClass) {
         this.entityClass = entityClass;

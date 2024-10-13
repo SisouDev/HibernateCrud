@@ -9,15 +9,6 @@ import org.hibernate.utils.JpaUtil;
 import java.util.List;
 
 public class OrderDao {
-    public Order createOrder(Order order) {
-        EntityManager entityManager = JpaUtil.getEntityManager();
-        entityManager.getTransaction().begin();
-        entityManager.persist(order);
-        entityManager.getTransaction().commit();
-        entityManager.close();
-        return order;
-    }
-
     public Order getOrderById(EntityManager entityManager, Long orderId){
         Order order = entityManager.find(Order.class, orderId);
         if (order == null) {

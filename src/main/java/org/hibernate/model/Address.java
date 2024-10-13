@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "address")
-public class Addresses {
+public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,10 +19,10 @@ public class Addresses {
     @Column(length = 50, nullable = false)
     private String country;
 
-    public Addresses() {
+    public Address() {
     }
 
-    public Addresses(String street, String city, String state, String country) {
+    public Address(String street, String city, String state, String country) {
         this.street = street;
         this.city = city;
         this.state = state;
@@ -34,6 +34,9 @@ public class Addresses {
     }
 
     public void setCountry(String country) {
+        if (country == null || country.isEmpty()) {
+            throw new IllegalArgumentException("Country cannot be null or empty");
+        }
         this.country = country;
     }
 
@@ -58,6 +61,11 @@ public class Addresses {
     }
 
     public void setState(String state) {
+        if (state == null || state.isEmpty()) {
+            throw new IllegalArgumentException("State cannot be null or empty");
+        } else if (state.length() > 2){
+            throw new IllegalArgumentException("State length must be less than 2");
+        }
         this.state = state;
     }
 
@@ -68,7 +76,7 @@ public class Addresses {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Addresses addresses)) return false;
+        if (!(o instanceof Address addresses)) return false;
         return Objects.equals(getId(), addresses.getId());
     }
 

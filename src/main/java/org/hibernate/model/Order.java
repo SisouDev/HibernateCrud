@@ -38,13 +38,13 @@ public class Order {
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "address_id")
-    private Addresses address;
+    private Address address;
 
     public Order() {
     }
 
 
-    public Order(ORDER_STATUS status, User user, List<Product> products, Addresses address, Double shippingFee) {
+    public Order(ORDER_STATUS status, User user, List<Product> products, Address address, Double shippingFee) {
         this.status = status;
         this.user = user;
         this.products = products;
@@ -115,11 +115,11 @@ public class Order {
         this.totalPrice = totalPrice;
     }
 
-    public Addresses getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(Addresses address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
